@@ -1,0 +1,33 @@
+
+[
+    {
+        "id": "room_101",
+        "name": "Classroom 101",
+        "allowed_periods": []
+    },
+    {
+        "id": "room_102",
+        "name": "Classroom 102",
+        "allowed_periods": []
+    },
+    {
+        "id": "room_103",
+        "name": "Classroom 103",
+        "allowed_periods": []
+    },
+    {
+        "id": "room_104",
+        "name": "Classroom 104",
+        "allowed_periods": []
+    },
+    {
+        "id": "main_gate",
+        "name": "Main Gate",
+        "allowed_periods": [0, 8]
+    },
+    {
+        "id": "library",
+        "name": "Library",
+        "allowed_periods": [3, 4]
+    }
+]

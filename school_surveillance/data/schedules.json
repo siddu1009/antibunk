@@ -1,0 +1,23 @@
+
+[
+    {
+        "student_id": "101",
+        "period": 1,
+        "classroom_id": "room_101"
+    },
+    {
+        "student_id": "101",
+        "period": 2,
+        "classroom_id": "room_102"
+    },
+    {
+        "student_id": "102",
+        "period": 1,
+        "classroom_id": "room_103"
+    },
+    {
+        "student_id": "102",
+        "period": 2,
+        "classroom_id": "room_104"
+    }
+]

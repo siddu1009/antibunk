@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Violation Log</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
+        h1 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: #fff; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .violation-confirmed { color: red; font-weight: bold; }
+        .alert-sent { color: orange; }
+    </style>
+</head>
+<body>
+    <h1>Anti-Bunking Violation Log</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Zone ID</th>
+                <th>Timestamp</th>
+                <th>Grace Period Expired</th>
+                <th>Alert Sent</th>
+            </tr>
+        </thead>
+        <tbody id="violations-table-body">
+            {% for violation in violations %}
+            <tr>
+                <td>{{ violation.student_id }}</td>
+                <td>{{ violation.zone_id }}</td>
+                <td>{{ violation.timestamp }}</td>
+                <td class="{% if violation.grace_period_expired %}violation-confirmed{% endif %}">{{ violation.grace_period_expired }}</td>
+                <td class="{% if violation.alert_sent %}alert-sent{% endif %}">{{ violation.alert_sent }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script type="text/javascript">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', function() {
+            console.log('Connected to SocketIO server');
+        });
+
+        socket.on('update_violations', function(violation) {
+            console.log('Received new violation:', violation);
+            var tableBody = document.getElementById('violations-table-body');
+            var newRow = tableBody.insertRow(0); // Insert at the top
+
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+            var cell5 = newRow.insertCell(4);
+
+            cell1.textContent = violation.student_id;
+            cell2.textContent = violation.zone_id;
+            cell3.textContent = new Date(violation.timestamp).toLocaleString();
+            cell4.textContent = violation.grace_period_expired;
+            cell5.textContent = violation.alert_sent;
+
+            if (violation.grace_period_expired) {
+                cell4.classList.add('violation-confirmed');
+            }
+            if (violation.alert_sent) {
+                cell5.classList.add('alert-sent');
+            }
+        });
+    </script>
+</body>
+</html>

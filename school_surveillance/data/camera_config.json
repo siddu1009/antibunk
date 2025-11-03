@@ -1,0 +1,10 @@
+{
+       "camera_0": {
+            "zone_id": "main_gate"
+        },
+        "camera_1": {
+            "zone_id": "library"
+        }
+    }
+
+    
