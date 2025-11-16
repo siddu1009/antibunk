@@ -7,6 +7,7 @@ class Student:
     id: str
     name: str
     image_path: str
+    parent_email: str = ""
 
 @dataclass
 class Schedule:

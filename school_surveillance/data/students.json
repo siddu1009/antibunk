@@ -3,18 +3,21 @@
         "id": "101",
         "name": "John Doe",
         "face_embedding": [],
-        "image_path": "data/student_images/101.jpg"
+        "image_path": "data/student_images/101.jpg",
+        "parent_email": "john.doe.parent@example.com"
     },
     {
         "id": "102",
         "name": "Jane Smith",
         "face_embedding": [],
-        "image_path": "data/student_images/102.jpg"
+        "image_path": "data/student_images/102.jpg",
+        "parent_email": "jane.smith.parent@example.com"
     },
     {
         "id": "103",
         "name": "Peter Jones",
         "face_embedding": [],
-        "image_path": "data/student_images/103.jpg"
+        "image_path": "data/student_images/103.jpg",
+        "parent_email": "peter.jones.parent@example.com"
     }
 ]
