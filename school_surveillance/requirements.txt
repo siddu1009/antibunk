@@ -1,0 +1,10 @@
+
+
+
+
+deepface
+opencv-python
+pandas
+python-socketio
+flask
+flask-socketio
