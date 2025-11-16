@@ -7,9 +7,10 @@ from .data_models import Student, Schedule, Zone
 from .rule_engine import RuleEngine
 from .face_recognition import FaceRecognizer
 from .database import init_db, load_students, load_schedules, load_zones, save_violation
+from .config import CAMERA_CONFIG_PATH, STUDENT_IMAGES_DB_PATH
 
 def load_camera_config():
-    with open('school_surveillance/data/camera_config.json', 'r') as f:
+    with open(CAMERA_CONFIG_PATH, 'r') as f:
         camera_config = json.load(f)
     return camera_config
 
@@ -54,7 +55,7 @@ def main():
             sio.disconnect()
         return
 
-    student_images_db_path = "school_surveillance/data/student_images"
+    student_images_db_path = STUDENT_IMAGES_DB_PATH
 
     while True:
         frames: Dict[int, cv2.Mat] = {}
@@ -89,18 +90,16 @@ def main():
                 font = cv2.FONT_HERSHEY_DUPLEX
                 cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 
-                if name != "Unknown":
-                    # Process violation and get the violation object if confirmed
-                    rule_engine.process_violation(name, current_zone_id)
-                    violation = rule_engine.active_violations.get(name)
-                    if violation and violation.alert_sent and sio:
-                        sio.emit('new_violation', {
-                            'student_id': violation.student_id,
-                            'zone_id': violation.zone_id,
-                            'timestamp': violation.timestamp.isoformat(),
-                            'grace_period_expired': violation.grace_period_expired,
-                            'alert_sent': violation.alert_sent
-                        })
+                # Process violation and get the violation object if confirmed
+                violation = rule_engine.process_violation(name, current_zone_id)
+                if violation and sio:
+                    sio.emit('new_violation', {
+                        'student_id': violation.student_id,
+                        'zone_id': violation.zone_id,
+                        'timestamp': violation.timestamp.isoformat(),
+                        'grace_period_expired': violation.grace_period_expired,
+                        'alert_sent': violation.alert_sent
+                    })
 
             cv2.imshow(f'Camera {camera_index} - Zone: {current_zone_id}', frame)
 

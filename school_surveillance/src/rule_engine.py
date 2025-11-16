@@ -6,7 +6,7 @@ from .notifications import send_email_notification
 from .config import SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, ALERT_RECIPIENT_EMAIL
 
 class RuleEngine:
-    def __init__(self, students: List[Student], schedules: List[Schedule], zones: List[Zone], grace_period_minutes: int = 2):
+    def __init__(self, students: List[Student], schedules: List[Schedule], zones: List[Zone], grace_period_minutes: int = 0):
         self.students = {s.id: s for s in students}
         self.schedules = schedules
         self.zones = {z.id: z for z in zones}
@@ -61,12 +61,13 @@ class RuleEngine:
         self.last_seen_location[student_id] = (current_zone_id, datetime.now())
 
         if self.is_student_allowed_in_zone(student_id, current_zone_id):
-            return
+            return None
 
         if student_id not in self.active_violations:
             self.active_violations[student_id] = Violation(student_id, current_zone_id, datetime.now())
             print(f"[⏰] Rule Triggered: {datetime.now().strftime('%I:%M %p')} Attendance Window")
             print(f"[👁] Student {student_id} detected outside permitted zone ({current_zone_id}). Grace period started.")
+            return None
         else:
             violation = self.active_violations[student_id]
             if not violation.grace_period_expired and datetime.now() - violation.timestamp > self.grace_period:
@@ -86,3 +87,6 @@ class RuleEngine:
                 )
                 
                 violation.alert_sent = True
+                return violation
+
+        return None

@@ -1,10 +1,9 @@
-
-
-
-
 deepface
 opencv-python
 pandas
 python-socketio
 flask
 flask-socketio
+tf-keras
+websocket-client
+gunicorn
