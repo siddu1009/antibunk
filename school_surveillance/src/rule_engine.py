@@ -3,7 +3,7 @@ from typing import List, Dict, Tuple
 from .data_models import Student, Schedule, Zone, Violation
 from .database import save_violation
 from .notifications import send_email_notification
-from .config import SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, SMTP_SENDER_EMAIL
+from .config import SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, ALERT_RECIPIENT_EMAIL
 
 class RuleEngine:
     def __init__(self, students: List[Student], schedules: List[Schedule], zones: List[Zone], grace_period_minutes: int = 2):
@@ -78,28 +78,11 @@ class RuleEngine:
             if violation.grace_period_expired and not violation.alert_sent:
                 print(f"[🔔] NOTIFICATION: Student {student_id} marked absent. Bunking Score: {self.bunking_score[student_id]}")
                 
-                # Send email notification
-                student_name = self.students[student_id].name
-                subject = f"Truancy Alert: Student {student_name} ({student_id}) Absent"
-                body = (
-                    f"Student {student_name} ({student_id}) has been detected outside their permitted zone "
-                    f"({current_zone_id}) and has not returned within the grace period.\n\n"
-                    f"Current Bunking Score: {self.bunking_score[student_id]}"
+                send_email_notification(
+                    student_id=student_id,
+                    zone_id=current_zone_id,
+                    timestamp=violation.timestamp,
+                    bunking_score=self.bunking_score[student_id]
                 )
-                recipient_email = self.students[student_id].parent_email # Assuming student object has parent_email
-                
-                if recipient_email:
-                    send_email_notification(
-                        smtp_host=SMTP_HOST,
-                        smtp_port=SMTP_PORT,
-                        smtp_username=SMTP_USERNAME,
-                        smtp_password=SMTP_PASSWORD,
-                        sender_email=SMTP_SENDER_EMAIL,
-                        recipient_email=recipient_email,
-                        subject=subject,
-                        body=body
-                    )
-                else:
-                    print(f"[⚠️] No recipient email found for student {student_id}. Email notification skipped.")
                 
                 violation.alert_sent = True

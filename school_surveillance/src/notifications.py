@@ -3,7 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 from .config import SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, ALERT_RECIPIENT_EMAIL
 
-def send_email_alert(student_id: str, zone_id: str, timestamp, bunking_score: int):
+def send_email_notification(student_id: str, zone_id: str, timestamp, bunking_score: int):
     """
     Sends an email alert for a confirmed violation.
     

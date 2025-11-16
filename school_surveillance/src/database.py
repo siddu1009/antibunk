@@ -2,9 +2,8 @@ import sqlite3
 import json
 from typing import List, Dict, Tuple
 from datetime import datetime
+from .config import DATABASE_NAME
 from .data_models import Student, Schedule, Zone, Violation
-
-DATABASE_NAME = "school_surveillance.db"
 
 def init_db():
     conn = sqlite3.connect(DATABASE_NAME)
