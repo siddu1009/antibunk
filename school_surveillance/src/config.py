@@ -1,3 +1,4 @@
+
 # school_surveillance/src/config.py
 
 DATABASE_NAME = "school_surveillance.db"
