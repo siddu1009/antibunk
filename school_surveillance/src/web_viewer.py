@@ -7,8 +7,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 @app.route('/')
 def index():
-    violations = load_violations()
-    return render_template('index.html', violations=violations)
+    return render_template('index.html', violations=[])
 
 @socketio.on('connect')
 def test_connect():
@@ -22,7 +21,7 @@ def test_disconnect():
 @socketio.on('new_violation')
 def handle_new_violation(json):
     print('received new violation: ' + str(json))
-    socketio.emit('update_violations', json, broadcast=True)
+    socketio.emit('update_violations', json)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

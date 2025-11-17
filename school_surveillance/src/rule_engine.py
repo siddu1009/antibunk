@@ -74,7 +74,6 @@ class RuleEngine:
                 violation.grace_period_expired = True
                 print(f"[⚖️] Student {student_id} has not returned within the grace period. Violation confirmed.")
                 self.bunking_score[student_id] += 1
-                save_violation(violation) # Save to database
             
             if violation.grace_period_expired and not violation.alert_sent:
                 print(f"[🔔] NOTIFICATION: Student {student_id} marked absent. Bunking Score: {self.bunking_score[student_id]}")
@@ -87,6 +86,7 @@ class RuleEngine:
                 )
                 
                 violation.alert_sent = True
+                save_violation(violation) # Save to database
                 return violation
 
         return None
