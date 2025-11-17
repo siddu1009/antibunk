@@ -5,3 +5,4 @@ __pycache__/
 .DS_Store
 school_surveillance.db
 school_surveillance.db
+supervision/
